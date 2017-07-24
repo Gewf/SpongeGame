@@ -23,3 +23,7 @@ The 3 out of the 4 final levels are playable.
 
 
 You can and are encouraged to report any bugs/issues thru github.
+
+[1][Download here]
+
+[1]:https://github.com/PKTINOS/SpongeGame/releases
