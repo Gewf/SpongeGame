@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SpongeGame")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("SpongeGame")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyDescription("A game featuring Sponge, the character created by the Vinesauce community.")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("PKTINOS")]
 [assembly: AssemblyProduct("OpenTKPlatformerExample")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
