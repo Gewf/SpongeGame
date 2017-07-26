@@ -304,7 +304,6 @@ namespace OpenTKPlatformerExample
             }
             if ((Input.KeyPress(OpenTK.Input.Key.X) || (Input.B && !Input.lastB)) && fireflower)
             {
-                Console.WriteLine(ObjectHandler.fireballsonscreen.ToString());
                 sprite = firespriteShoot;
                 if (facingRight)
                     ObjectHandler.AddObject(ObjectHandler.ObjectType.Fireball, new Vector2(position.X + size.X / 2, position.Y + 5));

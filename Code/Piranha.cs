@@ -131,7 +131,7 @@ namespace OpenTKPlatformerExample
             if (ObjectHandler.fireballsonscreen != 0)
                 foreach (GameObject o in ObjectHandler.objects.ToArray())
                     if (o.type == ObjectHandler.ObjectType.Fireball)
-                        if (Math.Sqrt(Math.Pow(position.X - o.position.X, 2) + Math.Pow(position.Y - o.position.Y, 2)) < 24)
+                        if (Math.Sqrt(Math.Pow(position.X - o.position.X, 2) + Math.Pow(position.Y - o.position.Y, 2)) < 32)
                         {
                             ObjectHandler.objects.Remove(o);
                             ObjectHandler.fireballsonscreen -= 1;

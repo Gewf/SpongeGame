@@ -60,6 +60,25 @@ namespace OpenTKPlatformerExample
             else if (type == ObjectType.Door)
             {
                 size = new Vector2(48, 96);
+            }else if (type == ObjectType.Logo)
+            {
+                size = new Vector2(426, 188)/1.5f;
+            }else if (type == ObjectType.Cursor)
+            {
+                size = new Vector2(24,24);
+            }else if (type == ObjectType.Play)
+            {
+                size = new Vector2(267, 53) / 2f;
+
+            }else if (type == ObjectType.Options)
+            {
+                size = new Vector2(427,53)/2f;
+            }else if (type == ObjectType.SadSponge)
+            {
+                size = new Vector2(50, 78);
+            }else if (type == ObjectType.TheBones)
+            {
+                size = new Vector2(113, 27);
             }
         }
         public void Draw(Color color)
@@ -86,6 +105,7 @@ namespace OpenTKPlatformerExample
                     return;
             }
             catch { }
+            if (type != ObjectType.Cursor)
             index++;
             if (index >= 12)
             {
@@ -149,7 +169,7 @@ namespace OpenTKPlatformerExample
                 float cx, cy;
                 cx = position.X + size.X / 2;
                 cy = position.Y + size.Y / 2;
-                if (Math.Sqrt(Math.Pow(player.position.X - cx, 2) + (Math.Pow(player.position.Y - cy, 2))) < size.X )
+                if (Math.Sqrt(Math.Pow(player.position.X - cx, 2) + (Math.Pow(player.position.Y - cy, 2))) < size.X)
                 {
                     if (Input.KeyDown(OpenTK.Input.Key.Up) || Input.up)
                     {
@@ -169,7 +189,7 @@ namespace OpenTKPlatformerExample
                                 new Message("If this degenerateof a brother      doesn't make it intime,I will make  sure he regrets   this.",Color.DarkRed),
                                 new Message("I wonder whose    bright idea it wasto introduce a newbrother. Me and   L**** were doing  just fine...", Color.DarkRed),
                             };
-                                
+
                             Game.slevel = "afterstory1";
                             Game.Level = 2;
                             Game.LoadLevel("Desert.xml");
@@ -189,7 +209,35 @@ namespace OpenTKPlatformerExample
                         }
                     }
                 }
-            }
+            } else if (type == ObjectType.Cursor)
+            {
+                
+                if ((Input.KeyDown(OpenTK.Input.Key.Up) || Input.up) && index == 1)
+                {
+                    index = 0;
+                    position.Y -= 48;
+                }
+                //No "else if" because now if you hold both buttons the cursor wont move.
+                if ((Input.KeyDown(OpenTK.Input.Key.Down) || Input.down) && index == 0)
+                {
+                    index = 1;
+                    position.Y += 48;
+                }
+                if (Input.KeyPress(OpenTK.Input.Key.Z) || Input.A)
+                {
+                    if (index == 0)
+                    {
+                        Game.music.Stop();
+                        Game.slevel = "introstory";
+                        Game.Reset();
+                    }else
+                    {
+
+                        new Settings().ShowDialog();
+                    }
+                }   
+                        
+           }
         }
         private void ResolveCollisions(ref Level level)
         {

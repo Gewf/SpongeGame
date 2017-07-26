@@ -196,6 +196,27 @@ namespace OpenTKPlatformerExample
                                     for (int t = 0; t < 13; t ++)
                                     Game.enemies.Add(new Enemy(new EventGhost(new Vector2(x4 / 70 + 0.5f, y4 / 70 + 0.5f) * 48, new Vector2(0, 0.5f)), 4));
                                     break;
+                                case "logo":
+                                    int xy1 = int.Parse(objects[i].Attributes["x"].Value);
+                                    int yy1 = int.Parse(objects[i].Attributes["y"].Value);
+                                    Vector2 py1 =new Vector2( (new Vector2(xy1 / 70 , yy1 / 70) * 48).X -15 , (new Vector2(xy1 / 70, yy1 / 70) * 48).Y);
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.Logo, py1);
+                                    break;
+                                case "cursor":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.Cursor, new Vector2(300, 460));
+                                    break;
+                                case "play":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.Play, new Vector2(336, 460));
+                                    break;
+                                case "options":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.Options, new Vector2(336, 508));
+                                    break;
+                                case "spongesad":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.SadSponge, new Vector2(350, 690));
+                                    break;
+                                case "thebones":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.TheBones, new Vector2(400, 741));
+                                    break;
                                 default:
 									Console.WriteLine("Unknown object: {0}", objects[i].Attributes["name"].Value);
 									break;

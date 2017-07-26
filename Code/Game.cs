@@ -9,6 +9,8 @@ using OpenTK.Input;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing.Imaging;
+using System.Threading;
+using System.Media;
 
 namespace OpenTKPlatformerExample
 {
@@ -17,7 +19,7 @@ namespace OpenTKPlatformerExample
         #region declarations
         public static int GRIDSIZE = 48;
         public static int Level = 1;
-  
+        public static SoundPlayer music = new SoundPlayer(Environment.CurrentDirectory + "/Content/menusong.wav");
         public static List<Enemy> enemies = new List<Enemy>();
         public static Texture2D dot;
         public static string slevel = "";
@@ -91,7 +93,7 @@ namespace OpenTKPlatformerExample
             : base(640, 480, new OpenTK.Graphics.GraphicsMode(32, 24, 0, 8))
         {
             Title = "";
-            slevel = "story";
+            slevel = "menu";
             WindowBorder = WindowBorder.Fixed;
             if (SoundManager.volume == -1)
             SoundManager.volume = 0.1f;
@@ -132,9 +134,11 @@ namespace OpenTKPlatformerExample
             Ghost.Load();
             EventGhost.Load();
             Piranha.Load();
-            //Load the first level and texture
+            //Load the texture
             tileSet = ContentPipe.LoadTexture("TileSet1.png");
-            level = new Level("Content/Levels/Level1.xml");
+            level = new Level("Content/Levels/Menu.xml");
+           
+            music.PlayLooping();
             player = new Player(new Vector2(level.playerStartPos.X + 0.5f, level.playerStartPos.Y + 0.5f) * GRIDSIZE, new Vector2(0, 0.8f)); //Player object
             view.width = level[0, 0].posX + Width / 2 + 35; 
             #region Create dot texture
@@ -163,109 +167,101 @@ namespace OpenTKPlatformerExample
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-            Input.EarlyUpdate();
-            if (!slevel.Contains("story")) //Levels that contain "story" will not render the level or update anything, just display
-                                           //the story
-                player.Update(ref level);
-            if (slevel.Contains("story"))
+
+            if (slevel == "menu")
             {
-                if (DialogBox.UpdateString())
+                Input.EarlyUpdate();
+               
+                
+                view.SetPosition(player.position, TweenType.Instant, 15);
+                view.Update();
+                foreach (GameObject o in ObjectHandler.objects.ToArray())
                 {
-                    if (Input.KeyPress(Key.Z) || (Input.A && !Input.lastA))
+                    o.Update(player);
+                }
+                Input.Update();
+                Input.LateUpdate();
+            }
+            else
+            {
+
+                Input.EarlyUpdate();
+                if (!slevel.Contains("story")) //Levels that contain "story" will not render the level or update anything, just display
+                                               //the story
+                    player.Update(ref level);
+                if (slevel.Contains("story"))
+                {
+                    if (DialogBox.UpdateString())
                     {
-                        if (introind < intro.Length - 1)
+                        if (Input.KeyPress(Key.Z) || (Input.A && !Input.lastA))
                         {
-                            introind++;
-                            DialogBox.cd = intro[introind].color;
-                            DialogBox.LoadString(intro[introind].msg);
-                        }
-                        else
-                        {
-                            slevel = "game";
-                            player.invincibletime = Environment.TickCount;
-                            SoundManager.volume = 0.1f;
-                            DialogBox.cd = Color.White;
-                            intro = new Message[] { };
+                            if (introind < intro.Length - 1)
+                            {
+                                introind++;
+                                DialogBox.cd = intro[introind].color;
+                                DialogBox.LoadString(intro[introind].msg);
+                            }
+                            else
+                            {
+                                slevel = "game";
+                                player.invincibletime = Environment.TickCount;
+                                DialogBox.cd = Color.White;
+                                intro = new Message[] { };
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if (Input.KeyPress(Key.Z) || (Input.A && !Input.lastA))
+                    else
                     {
-                        DialogBox.meter = DialogBox.message.Length;
+                        if (Input.KeyPress(Key.Z) || (Input.A && !Input.lastA))
+                        {
+                            DialogBox.meter = DialogBox.message.Length;
+                        }
+
                     }
-
+                    if (Input.KeyPress(Key.X) || (Input.B && !Input.lastB))
+                    {
+                        intro = new Message[] { };
+                        slevel = "game";
+                        player.invincibletime = Environment.TickCount;
+                        DialogBox.cd = Color.White;
+                    }
                 }
-                if (Input.KeyPress(Key.X) || (Input.B && !Input.lastB))
+                Input.Update();
+                view.SetPosition(player.position, TweenType.Instant, 15);
+
+
+                view.Update();
+                foreach (GameObject o in ObjectHandler.objects.ToArray())
                 {
-                    intro = new Message[] { };
-                    slevel = "game";
-                    player.invincibletime = Environment.TickCount;
-                    SoundManager.volume = 0.1f;
-                    DialogBox.cd = Color.White;
+                    o.Update(player);
                 }
+                if (0 > ObjectHandler.fireballsonscreen)
+                {
+                    ObjectHandler.fireballsonscreen = 0;
+                }
+                else if (ObjectHandler.fireballsonscreen > 2)
+                {
+                    ObjectHandler.fireballsonscreen = 2;
+                }
+                Input.LateUpdate();
             }
-            Input.Update();
-            view.SetPosition(player.position, TweenType.Instant, 15);
-
-            
-            view.Update();
-            foreach (GameObject o in ObjectHandler.objects.ToArray())
-            {
-                o.Update(player);
-            }
-            if (0>ObjectHandler.fireballsonscreen)
-            {
-                ObjectHandler.fireballsonscreen = 0;
-            }else if (ObjectHandler.fireballsonscreen > 2)
-            {
-                ObjectHandler.fireballsonscreen = 2;
-            }
-            Input.LateUpdate();
         }
         //Render - draw stuff here
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            List<Enemy> afterdraw = new List<Enemy>(); //Enemies drawn after tiles - above them. (atm all except piranhas)
-            Color tilec = Color.LightGray;
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            if (slevel.Contains("story"))
-                GL.ClearColor(Color.FromArgb(255, 0, 0, 0));
-            else if (Level == 1)
+
+            if (slevel == "menu")
             {
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 GL.ClearColor(Color.FromArgb(255, 10, 10, 10));
-                tilec = Color.LightGray;
-            }else if (Level == 2)
-            {
-                GL.ClearColor(Color.FromArgb(255, 0, 20, 20));
-                tilec = Color.LightGray;
-            }
-            else if (Level == 3 || Level == 4)
-            {
-                GL.ClearColor(Color.FromArgb(255, 0, 0, 16));
-                tilec = Color.Gray;
-            }
-
-
-            Spritebatch.Begin(this);
-            view.ApplyTransforms();
-            
-            if (!slevel.Contains("story"))
+                Spritebatch.Begin(this);
+                view.ApplyTransforms();
                 foreach (GameObject o in ObjectHandler.objects)
                 {
-                    o.Draw(tilec);
+                    o.Draw(Color.FromArgb(255,90,90,90));
+                    
                 }
-            if (!slevel.Contains("story"))
-                foreach (Enemy ex in enemies)
-                {
-                    if (ex.enemyType == 5)
-                        ex.Draw();
-                    else
-                        afterdraw.Add(ex);
-                }
-            if (!slevel.Contains("story"))
                 for (int x = 0; x < level.Width; x++)
                 {
                     for (int y = 0; y < level.Height; y++)
@@ -278,23 +274,82 @@ namespace OpenTKPlatformerExample
 
                         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                        Spritebatch.DrawSprite(tileSet, new RectangleF(x * GRIDSIZE, y * GRIDSIZE, GRIDSIZE + 1, GRIDSIZE + 1), tilec, sourceRec);
+                        Spritebatch.DrawSprite(tileSet, new RectangleF(x * GRIDSIZE, y * GRIDSIZE, GRIDSIZE + 1, GRIDSIZE + 1), Color.FromArgb(255,90,90,90), sourceRec);
                     }
                 }
-            foreach (Enemy ex in afterdraw)
-            {
-                ex.Draw();
             }
-                if (!slevel.Contains("story"))
-                player.Draw(tilec);
-            if (!slevel.Contains("story"))
-                view.DrawHUD();
-            if (slevel.Contains("story"))
+            else
             {
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                DialogBox.DrawString(view.Position.X - 288, view.Position.Y);
+                List<Enemy> afterdraw = new List<Enemy>(); //Enemies drawn after tiles - above them. (atm all except piranhas)
+                Color tilec = Color.LightGray;
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                if (slevel.Contains("story"))
+                    GL.ClearColor(Color.FromArgb(255, 0, 0, 0));
+                else if (Level == 1)
+                {
+                    GL.ClearColor(Color.FromArgb(255, 10, 10, 10));
+                    tilec = Color.LightGray;
+                }
+                else if (Level == 2)
+                {
+                    GL.ClearColor(Color.FromArgb(255, 0, 20, 20));
+                    tilec = Color.LightGray;
+                }
+                else if (Level == 3 || Level == 4)
+                {
+                    GL.ClearColor(Color.FromArgb(255, 0, 0, 16));
+                    tilec = Color.Gray;
+                }
 
+
+                Spritebatch.Begin(this);
+                view.ApplyTransforms();
+
+                if (!slevel.Contains("story"))
+                    foreach (GameObject o in ObjectHandler.objects)
+                    {
+                        o.Draw(tilec);
+                    }
+                if (!slevel.Contains("story"))
+                    foreach (Enemy ex in enemies)
+                    {
+                        if (ex.enemyType == 5)
+                            ex.Draw();
+                        else
+                            afterdraw.Add(ex);
+                    }
+                if (!slevel.Contains("story"))
+                    for (int x = 0; x < level.Width; x++)
+                    {
+                        for (int y = 0; y < level.Height; y++)
+                        {
+
+                            int tileSize = 70;
+                            RectangleF sourceRec = new RectangleF(0, 0, 0, 0);
+
+                            sourceRec = new RectangleF(level[x, y].tileX, level[x, y].tileY, tileSize, tileSize);
+
+                            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                            Spritebatch.DrawSprite(tileSet, new RectangleF(x * GRIDSIZE, y * GRIDSIZE, GRIDSIZE + 1, GRIDSIZE + 1), tilec, sourceRec);
+                        }
+                    }
+                foreach (Enemy ex in afterdraw)
+                {
+                    ex.Draw();
+                }
+                if (!slevel.Contains("story"))
+                    player.Draw(tilec);
+                if (!slevel.Contains("story"))
+                    view.DrawHUD();
+                if (slevel.Contains("story"))
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                    DialogBox.DrawString(view.Position.X - 288, view.Position.Y);
+
+                }
+                
             }
             this.SwapBuffers();
         }

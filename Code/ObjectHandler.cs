@@ -19,6 +19,12 @@ namespace OpenTKPlatformerExample
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("fireflower.png")));
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("coinGold.png"))); //Load it twice to avoid adding more code - Lazyness at its finest! :)
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("door.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("logo.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("cursor.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("play.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("options.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("spongesad.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("thebones.png")));
         }
         public static void AddObject(ObjectType type, Vector2 position,bool left = false)
         {
@@ -42,7 +48,13 @@ namespace OpenTKPlatformerExample
             Fireball = 1,
             Fireflower = 2,
             StandingCoin = 3,
-            Door = 4
+            Door = 4,
+            Logo = 5,
+            Cursor = 6,
+            Play = 7,
+            Options = 8,
+            SadSponge = 9,
+            TheBones = 10,
         }
     }
 }
