@@ -27,3 +27,7 @@ You can and are encouraged to report any bugs/issues thru github.
 [Download here][1]
 
 [1]:https://github.com/PKTINOS/SpongeGame/releases
+
+[You can follow my twitter][2]
+
+[2]:https://twitter.com/PKTINOS
