@@ -24,7 +24,7 @@ namespace OpenTKPlatformerExample
         public bool isInvincible;
         public int invincibletime;
         public bool dying;
-        private Texture2D sprite, spriteJump, spriteFall, firespriteJump, firespriteFall, firespriteShoot, dead;
+        public Texture2D sprite, spriteJump, spriteFall, firespriteJump, firespriteFall, firespriteShoot, dead;
         private Texture2D[] walkAnimation;
         private Texture2D[] firewalkAnimation;
         private Vector2 size;
@@ -82,7 +82,10 @@ namespace OpenTKPlatformerExample
 
         public void Update(ref Level level)
         {
-
+            if (Game.Level == 6)
+            {
+                return;
+            }
 
             if (ObjectHandler.fireballsonscreen < 0)
             {
@@ -189,6 +192,7 @@ namespace OpenTKPlatformerExample
         public void Death()
         {
             View.Lives -= 1;
+            Enemy.noGhostattack = true;
             dying = true;
             fireflower = false;
             climbing = false;
@@ -435,7 +439,10 @@ namespace OpenTKPlatformerExample
 
         public void Draw(Color color)
         {
-            
+            if (Game.Level == 6)
+            {
+                return;
+            }
             RectangleF rec = DrawRec;
             if (dying)
             {

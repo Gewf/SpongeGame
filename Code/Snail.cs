@@ -235,8 +235,10 @@ namespace OpenTKPlatformerExample
                 rec.Height = -rec.Height;
             }
 
-
-            Spritebatch.DrawSprite(sprite, rec);
+            if (Game.Level != 5)
+                Spritebatch.DrawSprite(sprite, rec,Color.White);
+            else
+                Spritebatch.DrawSprite(sprite, rec, Color.DarkOrange);
         }
 
         private void ResolveCollisions(ref Level level)

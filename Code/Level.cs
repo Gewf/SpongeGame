@@ -101,6 +101,15 @@ namespace OpenTKPlatformerExample
                                 case 103: //WaterHead
                                     grid[x, y] = new Block(BlockType.Empty, x, y, (((gid - 1) % 12) * 72), (int)Math.Floor((float)(gid - 1) / 12) * 72);
                                     break;
+                                case 8: //LavaBody
+                                    grid[x, y] = new Block(BlockType.Empty, x, y, (((gid - 1) % 12) * 72), (int)Math.Floor((float)(gid - 1) / 12) * 72);
+                                    break;
+                                case 151: //LavaLadder
+                                    grid[x, y] = new Block(BlockType.Ladder, x, y, (((gid - 1) % 12) * 72), (int)Math.Floor((float)(gid - 1) / 12) * 72);
+                                    break;
+                                case 139: //LavaHead
+                                    grid[x, y] = new Block(BlockType.Empty, x, y, (((gid - 1) % 12) * 72), (int)Math.Floor((float)(gid - 1) / 12) * 72);
+                                    break;
                                 case 25: //FireflowerBlock
                                     grid[x, y] = new Block(BlockType.FlowerBlock, x, y, (((gid - 1) % 12) * 72), (int)Math.Floor((float)(gid - 1) / 12) * 72);
                                     break;
@@ -212,10 +221,16 @@ namespace OpenTKPlatformerExample
                                     ObjectHandler.AddObject(ObjectHandler.ObjectType.Options, new Vector2(336, 508));
                                     break;
                                 case "spongesad":
-                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.SadSponge, new Vector2(350, 690));
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.SadSponge, new Vector2(350, 706));
                                     break;
                                 case "thebones":
-                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.TheBones, new Vector2(400, 741));
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.TheBones, new Vector2(513, 741));
+                                    break;
+                                case "man_of_mystery":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.RedBrother, new Vector2(550,600));
+                                    break;
+                                case "shadow":
+                                    ObjectHandler.AddObject(ObjectHandler.ObjectType.Shadow, new Vector2(72,380));
                                     break;
                                 default:
 									Console.WriteLine("Unknown object: {0}", objects[i].Attributes["name"].Value);
@@ -344,7 +359,6 @@ namespace OpenTKPlatformerExample
 		public int posX, posY;
         public int tileX, tileY;
 		private bool solid, platform, ladder,coin,flower;
-
 		public bool IsSolid
 		{
 			get { return solid; }

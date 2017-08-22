@@ -75,10 +75,16 @@ namespace OpenTKPlatformerExample
                 size = new Vector2(427,53)/2f;
             }else if (type == ObjectType.SadSponge)
             {
-                size = new Vector2(50, 78);
+                size = new Vector2(54, 92)/1.5f;
             }else if (type == ObjectType.TheBones)
             {
-                size = new Vector2(113, 27);
+                size = new Vector2(-113, 27);
+            }else if (type == ObjectType.RedBrother)
+            {
+                size = new Vector2(54, 92);
+            }else if (type == ObjectType.Shadow)
+            {
+                size = new Vector2(640, 480);
             }
         }
         public void Draw(Color color)
@@ -157,7 +163,7 @@ namespace OpenTKPlatformerExample
                 float cx, cy;
                 cx = position.X + size.X / 2;
                 cy = position.Y + size.Y / 2;
-                if (Math.Sqrt(Math.Pow(player.position.X - cx, 2) + (Math.Pow(player.position.Y - cy, 2))) < size.X)
+                if (Math.Sqrt(Math.Pow(player.position.X - cx, 2) + (Math.Pow(player.position.Y - cy, 2))) <54)
                 {
                     SoundManager.sounds[2].Play();
                     objects.Remove(this);
@@ -187,26 +193,86 @@ namespace OpenTKPlatformerExample
                                 new Message("No no, don't you-aworry about it    boss.It will be   the happiest worldever.",Color.Red),
                                 new Message("*click*",Color.Gray),
                                 new Message("If this degenerateof a brother      doesn't make it intime,I will make  sure he regrets   this.",Color.DarkRed),
-                                new Message("I wonder whose    bright idea it wasto introduce a newbrother. Me and   L**** were doing  just fine...", Color.DarkRed),
+                                new Message("I wonder whose    bright idea it wasto introduce a newbrother. Let aloneANY brother.", Color.DarkRed), //check this
                             };
 
                             Game.slevel = "afterstory1";
                             Game.Level = 2;
+                            Game.introind = 0;
                             Game.LoadLevel("Desert.xml");
                             DialogBox.cd = Game.intro[0].color;
                             DialogBox.LoadString(Game.intro[0].msg);
                         }
                         else if (Game.Level == 2)
                         {
-                            //Add story
+                            Game.intro = new Message[]
+                        {
+                              //fix dialog
+                              new Message("Sponge has not    been good lately.",Color.DarkGreen),
+                              new Message("I think replacing his princess with a fake skeleton atthe end of his    first adventure...",Color.DarkGreen),
+                              new Message("was a pretty bad  idea for a prank, and-",Color.DarkGreen),
+                              new Message("I don't want to   hear it.",Color.DarkRed),
+                              new Message("You always take   things too        seriously.",Color.DarkRed),
+                              new Message("No wonder you're  always the one    noone picks in my games.",Color.DarkRed),
+                              new Message("You better pray   that your emo     brother has       already passed theghost house.",Color.DarkRed),
+                              new Message("For your own good",Color.DarkRed),
+                        };
+                            Game.slevel = "afterstory2";
                             Game.Level = 3;
+                            Game.introind = 0;
                             Game.LoadLevel("GhostHouse.xml");
+                            DialogBox.cd = Game.intro[0].color;
+                            DialogBox.LoadString(Game.intro[0].msg);
                         }
                         else if (Game.Level == 3)
                         {
                             Game.Level = 4;
                             Game.LoadLevel("GhostEventRoom.xml");
                         }
+                        else if (Game.Level == 4) 
+                        {
+                            Game.intro = new Message[]
+                              {
+                              //fix dialog
+                              new Message("He is not here    yet...",Color.DarkRed),
+                              new Message("I guess it was my fault for trustinga retard like him.",Color.DarkRed),
+                              new Message("Should've known   from the fact he  believes we       actually run      around and save   princesses.",Color.DarkRed),
+                              new Message("Ignorant just likehis other brother.",Color.DarkRed),
+                              new Message("At least I can useHIM to make money.",Color.DarkRed),
+                              new Message("The other one was just a useless    space consumer.",Color.DarkRed),
+
+                             };
+                            Game.slevel = "afterstory3";
+                            Game.Level = 5;
+                            Game.introind = 0;
+                            Game.LoadLevel("Castle.xml");
+                            DialogBox.cd = Game.intro[0].color;
+                            DialogBox.LoadString(Game.intro[0].msg);
+
+                        }else if (Game.Level == 5) 
+                        {
+                            Game.intro = new Message[]
+                              {
+                              new Message("I am done..       Now please...     Give them ba-",Color.DarkOrange),
+                              new Message("You are late.",Color.DarkRed),
+                              new Message("I threw your candyin the lava along with your brother.",Color.DarkRed),
+                              new Message("What is it Sponge?Are you going to  jump in too?",Color.DarkRed),
+                              new Message("Go ahead. I've    already made      enough money of ofyou to live for   years to come.",Color.DarkRed),
+                              new Message("Noone even knows  you exist. I take all the credit andmoney for your    work.",Color.FromArgb(255,80,0,0)),
+                              new Message("You are worthless just like your br-",Color.DarkRed),
+                              new Message("Huh.              He actually did it",Color.DarkRed),
+                              new Message("Whatever. This    world isn't for   the weak.",Color.DarkRed),
+                              new Message("I'll just use the other brother     Pretzel just like I used Sponge.",Color.DarkRed),
+
+                             };
+                            Game.slevel = "afterstory4";
+                            Game.introind = 0;
+                            Game.Level = 6;
+                            Game.LoadLevel("Epilogue.xml");
+                            DialogBox.cd = Game.intro[0].color;
+                            DialogBox.LoadString(Game.intro[0].msg);
+                        }
+
                     }
                 }
             } else if (type == ObjectType.Cursor)
@@ -229,7 +295,7 @@ namespace OpenTKPlatformerExample
                     {
                         Game.music.Stop();
                         Game.slevel = "introstory";
-                        Game.Reset();
+                        Game.Reload();
                     }else
                     {
 
@@ -254,7 +320,7 @@ namespace OpenTKPlatformerExample
                 {
                     RectangleF blockRec = new RectangleF(x * Game.GRIDSIZE, y * Game.GRIDSIZE, Game.GRIDSIZE, Game.GRIDSIZE);
 
-                    if (level[x, y].IsSolid && this.ColRec.IntersectsWith(blockRec))
+                    if ((level[x, y].IsSolid || level[x, y].IsPlatform) && this.ColRec.IntersectsWith(blockRec))
                     {
 
                         #region Resolve

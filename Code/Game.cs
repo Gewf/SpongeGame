@@ -25,34 +25,37 @@ namespace OpenTKPlatformerExample
         public static string slevel = "";
         public static int introind = 0;
         public static Random rand = new Random();
-        Texture2D tileSet;
-        View view;
+        public static Texture2D tileSet;
+        public static View view;
         public static Level level;
         public static Player player;
 
         public static Message[] intro = new Message[]
         {
-            new Message("Looks like anotherworld is finished.",Color.DarkRed),
-            new Message("Are you sure aboutthat brother? Thisone looks kinda   depressing to me..", Color.DarkGreen),
-            new Message("All the enemies.. powerups.. coins..everything is sad,even the sky.", Color.DarkGreen),
-            new Message("Oh don't worry    about that.",Color.DarkRed),
-            new Message("SPONGE!",Color.DarkRed),
-            new Message("...",Color.DarkOrange),
-            new Message("Make your lazy    ass useful and useyour stupid power to soak the       sadness of the newworld.",Color.DarkRed),
-            new Message("B-but it's the 2ndtime this month.  And you took away my antidepressant pills last ti-",Color.DarkOrange),
-            new Message("HOW MANY TIMES DO I HAVE TO TELL    THIS TO YOU?!",Color.DarkRed),
-            new Message("We are out there  risking our lives fighting a giant  dragon to save theprincess.",Color.DarkRed),
-            new Message("You might aswell  do SOMETHING      instead of sittinghere all day      crying.",Color.DarkRed),
-            new Message("He is our brother man,don't be so   harsh on him.", Color.DarkGreen),
-            new Message("You better not be telling me what   to do,you         fucking adopted   terminal-7 host.",Color.DarkRed),
-            new Message("But M-", Color.DarkGreen),
-            new Message("SHUT YOUR MOUTH   IDIOT!",Color.DarkRed),
-            new Message("Do you want us to get DMCA'ed? You  can  only refer toyour drama queen  brother with his  real name.",Color.DarkRed),
-            new Message("O-okay brother.", Color.DarkGreen),
-            new Message("Now I have some   stuff to do unlikeyou two lifeless  losers.",Color.DarkRed),
-            new Message("Do as I said      Sponge.If you're  lucky, I might    consider giving   you your stupid   tic-tacs back.",Color.DarkRed),
-            new Message("Now get to work.",Color.DarkRed),
-        };
+
+
+        new Message("Looks like anotherworld is finished.",Color.DarkRed),
+        new Message("Are you sure aboutthat brother? Thisone looks kinda   depressing to me..", Color.DarkGreen),
+        new Message("All the enemies.. powerups.. coins..everything is sad,even the sky.", Color.DarkGreen),
+        new Message("Oh don't worry    about that.",Color.DarkRed),
+        new Message("SPONGE!",Color.DarkRed),
+        new Message("...",Color.DarkOrange),
+        new Message("Make your lazy    ass useful and useyour stupid power to soak the       sadness of the newworld.",Color.DarkRed),
+        new Message("B-but it's the 2ndtime this month.  And you took away my antidepressant pills last ti-",Color.DarkOrange),
+        new Message("HOW MANY TIMES DO I HAVE TO TELL    THIS TO YOU?!",Color.DarkRed),
+        new Message("We are out there  risking our lives fighting a giant  dragon to save theprincess.",Color.DarkRed),
+        new Message("You might aswell  do SOMETHING      instead of sittinghere all day      crying.",Color.DarkRed),
+        new Message("He is our brother man,don't be so   harsh on him.", Color.DarkGreen),
+        new Message("You better not be telling me what   to do,you         fucking adopted   terminal-7 host.",Color.DarkRed),
+        new Message("But M-", Color.DarkGreen),
+        new Message("SHUT YOUR MOUTH   IDIOT!",Color.DarkRed),
+        new Message("Do you want us to get DMCA'ed? You  can  only refer toyour drama queen  brother with his  real name.",Color.DarkRed),
+        new Message("O-okay brother.", Color.DarkGreen),
+        new Message("Now I have some   stuff to do unlikeyou two lifeless  losers.",Color.DarkRed),
+        new Message("Do as I said      Sponge.If you're  lucky, I might    consider giving   you your stupid   tic-tacs back.",Color.DarkRed),
+        new Message("Now get to work.",Color.DarkRed),
+    };
+        internal static bool corrupt;
         #endregion
         public static void Reset()
         {
@@ -85,13 +88,18 @@ namespace OpenTKPlatformerExample
                 level = new Level("Content/Levels/GhostEventRoom.xml");
             }else if (Level == 5)
             {
-                Console.WriteLine("Add level 5 to reload()");
+                level = new Level("Content/Levels/Castle.xml");
+            }else if (Level ==6)
+            {
+                level = new Level("Content/Levels/Epilogue.xml");
+
             }
             player = new Player(new Vector2(level.playerStartPos.X + 0.5f, level.playerStartPos.Y + 0.5f) * GRIDSIZE, new Vector2(0, 0.8f));
         }
         public Game()
             : base(640, 480, new OpenTK.Graphics.GraphicsMode(32, 24, 0, 8))
         {
+
             Title = "";
             slevel = "menu";
             WindowBorder = WindowBorder.Fixed;
@@ -227,8 +235,7 @@ namespace OpenTKPlatformerExample
                     }
                 }
                 Input.Update();
-                view.SetPosition(player.position, TweenType.Instant, 15);
-
+                view.SetPosition(player.position, TweenType.QuarticOut, 15);
 
                 view.Update();
                 foreach (GameObject o in ObjectHandler.objects.ToArray())
@@ -262,6 +269,7 @@ namespace OpenTKPlatformerExample
                     o.Draw(Color.FromArgb(255,90,90,90));
                     
                 }
+
                 for (int x = 0; x < level.Width; x++)
                 {
                     for (int y = 0; y < level.Height; y++)
@@ -295,9 +303,13 @@ namespace OpenTKPlatformerExample
                     GL.ClearColor(Color.FromArgb(255, 0, 20, 20));
                     tilec = Color.LightGray;
                 }
-                else if (Level == 3 || Level == 4)
+                else if (Level == 3 || Level == 4 || Level == 5)
                 {
                     GL.ClearColor(Color.FromArgb(255, 0, 0, 16));
+                    tilec = Color.Gray;
+                }else if (Level == 6)
+                {
+                    GL.ClearColor(Color.FromArgb(255, 16, 16, 16));
                     tilec = Color.Gray;
                 }
 
@@ -310,20 +322,19 @@ namespace OpenTKPlatformerExample
                     {
                         o.Draw(tilec);
                     }
-                if (!slevel.Contains("story"))
-                    foreach (Enemy ex in enemies)
-                    {
-                        if (ex.enemyType == 5)
-                            ex.Draw();
-                        else
-                            afterdraw.Add(ex);
-                    }
+                
+                List<Tuple<Block,Vector2>> afterdraws = new List<Tuple<Block, Vector2>>();
                 if (!slevel.Contains("story"))
                     for (int x = 0; x < level.Width; x++)
                     {
                         for (int y = 0; y < level.Height; y++)
                         {
-
+                            if (level[x, y].type == BlockType.Empty)
+                            {
+                                Tuple<Block, Vector2> t = new Tuple<Block, Vector2>(level[x, y], new Vector2(x, y));
+                                afterdraws.Add(t);
+                                continue;
+                            }
                             int tileSize = 70;
                             RectangleF sourceRec = new RectangleF(0, 0, 0, 0);
 
@@ -334,12 +345,32 @@ namespace OpenTKPlatformerExample
                             Spritebatch.DrawSprite(tileSet, new RectangleF(x * GRIDSIZE, y * GRIDSIZE, GRIDSIZE + 1, GRIDSIZE + 1), tilec, sourceRec);
                         }
                     }
+                if (!slevel.Contains("story"))
+                    foreach (Enemy ex in enemies)
+                    {
+                        if (ex.enemyType == 5)
+                            ex.Draw();
+                        else
+                            afterdraw.Add(ex);
+                    }
+                if (!slevel.Contains("story"))
+                    player.Draw(tilec);
+                foreach (Tuple<Block, Vector2> t in afterdraws.ToArray())
+                {
+                    int tileSize = 70;
+                    RectangleF sourceRec = new RectangleF(0, 0, 0, 0);
+
+                    sourceRec = new RectangleF(t.Item1.tileX, t.Item1.tileY, tileSize, tileSize);
+
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                    Spritebatch.DrawSprite(tileSet, new RectangleF(t.Item2.X * GRIDSIZE, t.Item2.Y * GRIDSIZE, GRIDSIZE + 1, GRIDSIZE + 1), tilec, sourceRec);
+                }
                 foreach (Enemy ex in afterdraw)
                 {
                     ex.Draw();
                 }
-                if (!slevel.Contains("story"))
-                    player.Draw(tilec);
+              
                 if (!slevel.Contains("story"))
                     view.DrawHUD();
                 if (slevel.Contains("story"))
@@ -349,7 +380,6 @@ namespace OpenTKPlatformerExample
                     DialogBox.DrawString(view.Position.X - 288, view.Position.Y);
 
                 }
-                
             }
             this.SwapBuffers();
         }

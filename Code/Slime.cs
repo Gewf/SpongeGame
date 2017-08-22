@@ -292,8 +292,10 @@ namespace OpenTKPlatformerExample
                 rec.Height = -rec.Height;
             }
 
-           
-            Spritebatch.DrawSprite(sprite, rec);
+            if (Game.Level != 5)
+            Spritebatch.DrawSprite(sprite, rec,Color.White);
+            else
+                Spritebatch.DrawSprite(sprite, rec, Color.Purple);
         }
     }
 }

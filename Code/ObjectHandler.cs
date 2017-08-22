@@ -25,6 +25,9 @@ namespace OpenTKPlatformerExample
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("options.png")));
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("spongesad.png")));
             definedSprites.Add(new Sprite(ContentPipe.LoadTexture("thebones.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("mysterious_man.png")));
+            definedSprites.Add(new Sprite(ContentPipe.LoadTexture("shadow.png")));
+
         }
         public static void AddObject(ObjectType type, Vector2 position,bool left = false)
         {
@@ -55,6 +58,8 @@ namespace OpenTKPlatformerExample
             Options = 8,
             SadSponge = 9,
             TheBones = 10,
+            RedBrother = 11,
+            Shadow = 12,
         }
     }
 }

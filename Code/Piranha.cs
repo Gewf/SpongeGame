@@ -151,8 +151,10 @@ namespace OpenTKPlatformerExample
                 sprite = p_down;
             if (isdead)
                 sprite = p_dead;
+            if (Game.Level != 5)
             Spritebatch.DrawSprite(sprite, rec, Color.White);
-
+            else
+                Spritebatch.DrawSprite(sprite, rec, Color.DarkOrange);
         }
     }
 }

@@ -178,12 +178,21 @@ namespace OpenTKPlatformerExample
 
         public void DrawHUD()
         {
-            //Lives
-            Spritebatch.DrawSprite(head, new RectangleF(position.X - 300, position.Y - 210,32,32));
-            DialogBox.DrawString("x"+Lives.ToString(), position.X - 268, position.Y - 210);
-            //Coins
-            Spritebatch.DrawSprite(coin, new RectangleF(position.X + 180, position.Y - 210, 32, 32));
-            DialogBox.DrawString("x" + Coins.ToString(), position.X + 212, position.Y - 210);
+            if (Game.Level != 6)
+            {
+                //Lives
+                Spritebatch.DrawSprite(head, new RectangleF(position.X - 300, position.Y - 210, 32, 32));
+                DialogBox.DrawString("x" + Lives.ToString(), position.X - 268, position.Y - 210);
+                //Coins
+                Spritebatch.DrawSprite(coin, new RectangleF(position.X + 180, position.Y - 210, 32, 32));
+                DialogBox.DrawString("x" + Coins.ToString(), position.X + 212, position.Y - 210);
+            }else
+            {
+                DialogBox.DrawString("The", position.X -48, position.Y -164);
+                DialogBox.DrawString("End", position.X -48, position.Y -132);
+
+
+            }
         }
 	}
 }
