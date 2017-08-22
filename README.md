@@ -18,10 +18,8 @@ His special power is to suck the depression from the levels with his mustache.
 This is why all the Mario games are always so happy.
 
 ### State of the game (right now):
-The game is not finished yet. Some story between the levels is missing, and so is the last level (the castle).   
-The 3 out of the 4 final levels are playable.   
-
-
+The game is finished. Story and levels are finished.
+There probably are a lot of bugs that came up from the lack of time and lack of playtesting.
 You can and are encouraged to report any bugs/issues thru github.
 
 [Download here][1]
